@@ -201,7 +201,7 @@ the default settings for the entire app (currently).
 			'SaveFile'      => '',
 			'StartURL'      => '',
 			'UserAgent'     => Nether\Option::Get('UserAgent')
-		],['ForceDefaultValues'=>$ForceDefaultVal]);
+		],['ForceDefaultValues'=>$ForceDefaultValues]);
 
 		return;
 	}
