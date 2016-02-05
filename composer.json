@@ -1,6 +1,7 @@
 {
 	"require": {
 		"querypath/querypath": "^3.0",
+		"netherphp/object": "^1.0.3",
 		"netherphp/console": "^1.0.7",
 		"netherphp/option": "^1.0.0"
 	},

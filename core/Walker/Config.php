@@ -104,7 +104,7 @@ the default settings for the entire app (currently).
 	////////////////
 	
 	public
-	$Delay = 0;
+	$Delay = null;
 	/*//
 	@type Int
 	defines how long we should wait between each step to not punch websites
@@ -112,7 +112,7 @@ the default settings for the entire app (currently).
 	//*/
 
 	public
-	$LastURL = '';
+	$LastURL = null;
 	/*//
 	@type String
 	defines the URL the process left off on. when it reaches the end of
@@ -128,7 +128,7 @@ the default settings for the entire app (currently).
 	$QueryNext;
 	
 	public
-	$SaveDir = '';
+	$SaveDir = null;
 	/*//
 	@type String
 	defines the directory files will be saved into while running. this string
@@ -136,7 +136,7 @@ the default settings for the entire app (currently).
 	//*/
 	
 	public
-	$SaveFile = '';
+	$SaveFile = null;
 	/*//
 	@type String
 	defines the filename for saving files. this string accepts a few varibles
@@ -145,7 +145,7 @@ the default settings for the entire app (currently).
 	//*/
 	
 	public
-	$StartURL = '';
+	$StartURL = null;
 	/*//
 	@type String
 	defines the URL to begin walking at. it will hit this url, download what
@@ -154,7 +154,7 @@ the default settings for the entire app (currently).
 	//*/
 	
 	public
-	$UserAgent = '';
+	$UserAgent = null;
 	/*//
 	@type String
 	these hips don't lie but your process will need to in order to not get
@@ -190,7 +190,7 @@ the default settings for the entire app (currently).
 			'SaveFile'      => '',
 			'StartURL'      => '',
 			'UserAgent'     => Nether\Option::Get('UserAgent')
-		]);
+		],['ForceDefaultValues'=>true]);
 
 		return;
 	}
