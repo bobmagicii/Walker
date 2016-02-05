@@ -180,6 +180,7 @@ the default settings for the entire app (currently).
 	//*/
 
 		$Dataset = null;
+		$ForceDefaultValues = true;
 
 		if($ConfigName) {
 			try { $Dataset = $this->Read($ConfigName); }
@@ -187,6 +188,9 @@ the default settings for the entire app (currently).
 				throw $Error;
 			}
 		}
+
+		if($Dataset)
+		$ForceDefaultValues = false;
 
 		parent::__Construct($Dataset,[
 			'Delay'         => Nether\Option::Get('Delay'),
@@ -197,7 +201,7 @@ the default settings for the entire app (currently).
 			'SaveFile'      => '',
 			'StartURL'      => '',
 			'UserAgent'     => Nether\Option::Get('UserAgent')
-		],['ForceDefaultValues'=>true]);
+		],['ForceDefaultValues'=>$ForceDefaultVal]);
 
 		return;
 	}
