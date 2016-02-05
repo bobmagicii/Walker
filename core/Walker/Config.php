@@ -53,7 +53,7 @@ the default settings for the entire app (currently).
 	/*//
 	@get File
 	//*/
-		
+
 		if(!$this->File)
 		$this->File = sprintf(
 			'%s%s%s.json',
@@ -67,7 +67,7 @@ the default settings for the entire app (currently).
 
 	////////////////
 	////////////////
-	
+
 	protected
 	$Name = '';
 	/*//
@@ -75,17 +75,17 @@ the default settings for the entire app (currently).
 	should be read and written to mostly, as well as just define an alias for
 	the specific task we want to perform.
 	//*/
-	
+
 	public function
 	GetName():
 	String {
 	/*//
 	@get $Name
 	//*/
-	
+
 		return $this->Name;
 	}
-	
+
 	public function
 	SetName(String $Name):
 	Self {
@@ -93,16 +93,16 @@ the default settings for the entire app (currently).
 	@set $Name
 	also regenerates the config file name when changed.
 	//*/
-	
+
 		$this->Name = $Name;
-		
-		$this->GetFile();		
+
+		$this->GetFile();
 		return $this;
 	}
 
 	////////////////
 	////////////////
-	
+
 	public
 	$Delay = null;
 	/*//
@@ -123,10 +123,10 @@ the default settings for the entire app (currently).
 
 	public
 	$QueryDownload;
-	
+
 	public
 	$QueryNext;
-	
+
 	public
 	$SaveDir = null;
 	/*//
@@ -134,7 +134,7 @@ the default settings for the entire app (currently).
 	defines the directory files will be saved into while running. this string
 	accepts a few variables to make setting easier.
 	//*/
-	
+
 	public
 	$SaveFile = null;
 	/*//
@@ -143,7 +143,7 @@ the default settings for the entire app (currently).
 	so that they can be saved with sequental numbering or whatever. if left
 	empty then the original filename from the web will be used.
 	//*/
-	
+
 	public
 	$StartURL = null;
 	/*//
@@ -152,7 +152,7 @@ the default settings for the entire app (currently).
 	it should, then look for the next page button and repeat until it runs
 	out of next page buttons.
 	//*/
-	
+
 	public
 	$UserAgent = null;
 	/*//
@@ -160,6 +160,13 @@ the default settings for the entire app (currently).
 	these hips don't lie but your process will need to in order to not get
 	banned by really anal devops. the app default is the vivaldi ua because
 	why not.
+	//*/
+
+	public
+	$Verbose = true;
+	/*//
+	@type Bool
+	controls how much stdout the thing dumps while working.
 	//*/
 
 	////////////////
@@ -178,7 +185,7 @@ the default settings for the entire app (currently).
 			try { $Dataset = $this->Read($ConfigName); }
 			catch(Exception $Error) {
 				throw $Error;
-			}			
+			}
 		}
 
 		parent::__Construct($Dataset,[
@@ -194,7 +201,7 @@ the default settings for the entire app (currently).
 
 		return;
 	}
-	
+
 
 
 	////////////////
@@ -207,7 +214,7 @@ the default settings for the entire app (currently).
 	performs the the reading of the config file from disk with any checks
 	deemed nessessary to safely do so.
 	//*/
-		
+
 		$this->SetName($Name);
 
 		if(!file_exists($this->File))
@@ -223,7 +230,7 @@ the default settings for the entire app (currently).
 
 		return $Dataset;
 	}
-	
+
 	public function
 	Write():
 	Self {
@@ -231,21 +238,21 @@ the default settings for the entire app (currently).
 	performs the writing of the config file to disk with any checks deemed
 	nessessary to safely do so.
 	//*/
-		
+
 		if(!$this->Name || !$this->File)
 		throw new Exception('this Config object needs to know its Name before it can write to disk.');
-		
+
 		if(file_exists($this->File) && !is_writable($this->File))
 		throw new Walker\Error\FileNotWritable($this->File);
-		
+
 		if(!file_exists($this->File) && !is_writable(dirname($this->File)))
 		throw new Walker\Error\FileNotWritable($this->File);
-		
+
 		file_put_contents(
 			$this->File,
 			json_encode($this,JSON_PRETTY_PRINT)
 		);
-		
+
 		return $this;
 	}
 

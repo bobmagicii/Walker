@@ -16,93 +16,24 @@ class Engine {
 	disk so that we can interact with it later.
 	//*/
 
-	////////////////
-	////////////////
-
-	protected
-	$QueryDownload = '';
+	public function
+	GetConfig():
+	Walker\Config {
 	/*//
-	@type String
-	stores the pattern that will be used to find othe url of the thing we want
-	to ninja from the source of the current page.
+	@get Config
 	//*/
 
-	public function
-	GetQueryDownload():
-	String {
-		return $this->QueryDownload;
+		return $this->Config;
 	}
 
 	public function
-	SetQueryDownload(String $Query):
+	SetConfig(Walker\Config $Config):
 	Self {
-		$this->QueryDownload = $Query;
-		return $this;
-	}
-
-	////////////////
-	////////////////
-
-	protected
-	$QueryNext = '';
 	/*//
-	@type String
-	stores the pattern that will be used to find out what url we should go
-	to next from the source of the current page.
+	@set Config
 	//*/
 
-	public function
-	GetQueryNext():
-	String {
-		return $this->QueryNext;
-	}
-
-	public function
-	SetQueryNext(String $Query):
-	Self {
-		$this->URL = $Query;
-		return $this;
-	}
-
-	////////////////
-	////////////////
-
-	protected
-	$SavePath = '';
-
-	public function
-	GetSavePath():
-	String {
-		return $this->SavePath;
-	}
-
-	public function
-	SetSavePath(String $Path):
-	Self {
-		$this->SavePath = $Path;
-		return $this;
-	}
-
-	////////////////
-	////////////////
-
-	protected
-	$StartURL = '';
-	/*//
-	@type String
-	stores the URL that we will start walking from.
-	//*/
-
-	public function
-	GetStartURL():
-	String {
-		return $this->URL;
-	}
-
-	public function
-	SetStartURL(String $URL):
-	Self {
-		$this->URL = $URL;
+		$this->Config = $Config;
 		return $this;
 	}
 
@@ -112,9 +43,7 @@ class Engine {
 	public function
 	__Construct(String $Config=null) {
 
-		if($Config)
-		$this->LoadConfig($Config);
-
+		$this->SetConfig(new Config($Config));
 		return;
 	}
 
@@ -122,10 +51,110 @@ class Engine {
 	////////////////
 
 	public function
-	LoadConfig(String $ConfigName):
+	Run($Opt=null):
 	Self {
+	/*//
+	begin the process that this library is actually designed to do, first
+	of course checking that it can actually do it.
+	//*/
 
-		$this->Config = new Config($ConfigName);
+		$this->Run_CheckRequirements();
+		$this->Run_CheckSaveDir();
+		$this->Run_MainLoop();
+
+		return $this;
+	}
+
+	protected function
+	Run_CheckRequirements():
+	Self {
+	/*//
+	check that we have all the configuration options and features that we need
+	to actually perform this task.
+	//*/
+
+		if(!ini_get('allow_url_fopen'))
+		throw new Exception('allow_url_fopen is not enabled in php.ini');
+
+		if(!$this->Config->SaveDir)
+		throw new Exception('no SaveDir is defined');
+
+		if(!$this->Config->LastURL && !$this->Config->StartURL)
+		throw new Exception('no StartURL is defined');
+
+		return $this;
+	}
+
+	protected function
+	Run_CheckSaveDir():
+	Self {
+	/*//
+	check that the save directory is in a usable state and attempt to create
+	it if it does not yet exist.
+	//*/
+
+		$Dir = $this->ParseStringVariables($this->Config->SaveDir);
+
+		if(file_exists($Dir)) {
+			if(!is_dir($Dir))
+			throw new Exception("{$Dir} is not a directory");
+
+			if(!is_writable($Dir))
+			throw new Exception("{$Dir} is not writable");
+		}
+
+		else {
+			if(!@mkdir($Dir,0777,true))
+			throw new Exception("unable to create {$Dir}");
+		}
+
+		$this->Message(">> Save Location: {$Dir}");
+		return $this;
+	}
+
+	protected function
+	Run_MainLoop():
+	Self {
+	/*//
+	like a bullet train.
+	//*/
+
+		if(!$this->Config->LastURL) {
+			$this->Config->LastURL = $this->Config->StartURL;
+			$this->Config->Write();
+		}
+
+		$URL = $this->Config->LastURL;
+
+		while($URL) {
+
+			$HTML = file_get_contents($URL);
+
+			if(!$HTML)
+			throw new Exception("unable to fetch {$URL}");
+
+			////////
+
+			// find the thing we want to keep.
+
+			// ...
+
+			////////
+
+			// find out where to go next.
+
+			$URL = null;
+
+			////////
+
+			if($URL) {
+				$this->Config->LastURL = $URL;
+				$this->Config->Write();
+
+				sleep($this->Config->Delay);
+			}
+		}
+
 		return $this;
 	}
 
@@ -133,38 +162,45 @@ class Engine {
 	////////////////
 
 	public function
-	Run():
+	Message(String $Input):
 	Self {
+	/*//
+	send messages to the console if enabled.
+	//*/
 
-		if(!$this->SavePath)
-		throw new Exception('no save path is defined');
+		if(!$this->Config->Verbose)
+		return;
+
+		Nether\Console\Client::Message($Input);
 
 		return $this;
 	}
 
-	////////////////
-	////////////////
-	
 	public function
 	ParseStringVariables(String $Input, Array $Replace=null):
 	String {
-		
+	/*//
+	parse variables in a string with dynamic data. this method includes some
+	default variables and you can pass additional ones for later use like
+	when we need to pass in iteration counts for file names.
+	//*/
+
 		$Table = [
 			'CONFIGNAME' => $this->Config->GetName()
 		];
-		
+
 		if(is_array($Replace))
 		$Table = array_merge($Table,$Replace);
-		
+
 		////////
 		////////
-		
+
 		foreach($Table as $Var => $Val)
 		$Input = str_replace("%{$Var}%",$Val,$Input);
-		
+
 		////////
 		////////
-		
+
 		return $Input;
 	}
 

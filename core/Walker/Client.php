@@ -71,16 +71,29 @@ technically, this class is the cli client.
 	run a specified job. no. walk the specified job.
 	//*/
 
-		$Config = $this->GetInput(2);
+		$ConfigName = $this->GetInput(2);
 		if(!$ConfigName) {
 			$this::Message('no config specified.');
 			$this->Run('help');
 			return 1;
 		}
 
-		try { $Walker = new Walker\Engine($Config); }
+		try { $Walker = new Walker\Engine($ConfigName); }
 		catch(Exception $Error) {
-			$this::Message($Error->GetMessage());
+			$this::Message(sprintf(
+				'LOAD: %s %s',
+				get_class($Error),
+				$Error->GetMessage()
+			));
+		}
+		
+		try { $Walker->Run(); }
+		catch(Exception $Error) {
+			$this::Message(sprintf(
+				'RUN: %s %s',
+				get_class($Error),
+				$Error->GetMessage()
+			));			
 		}
 
 		return 0;
