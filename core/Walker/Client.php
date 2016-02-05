@@ -23,6 +23,9 @@ technically, this class is the cli client.
 
 		$this::Messages(
 			'',
+			'create <configname>',
+			'creates a new config file with the default settings for you to fill in.',
+			'',
 			'walk <configname>',
 			'walks the path specified by the conf/<configname>.json file',
 			''
@@ -30,6 +33,36 @@ technically, this class is the cli client.
 
 		return 0;
 	}
+
+	////////////////
+	////////////////
+	
+	public function
+	HandleCreate():
+	Int {
+		
+		$ConfigName = $this->GetInput(2);
+		if(!$ConfigName) {
+			$this::Message('no config specified.');
+			$this->Run('help');
+			return 1;
+		}
+		
+		$Config = new Walker\Config;
+		$Config->SetName($ConfigName);
+		
+		if(file_exists($Config->GetFile()) && !$this->GetOption('force')) {
+			$this::Message("a config for {$ConfigName} already exists. use --force to overwrite.");
+			return 1;
+		}
+		
+		$this::Message("writing default settings to {$Config->GetFile()}");
+		$Config->Write();	
+		return 0;
+	}
+	
+	////////////////
+	////////////////
 
 	public function
 	HandleWalk():
@@ -39,16 +72,13 @@ technically, this class is the cli client.
 	//*/
 
 		$Config = $this->GetInput(2);
-
-		if(!$Config) {
+		if(!$ConfigName) {
 			$this::Message('no config specified.');
 			$this->Run('help');
 			return 1;
 		}
 
-		$this::Message("> loading conf/{$Config}.json");
-
-		try { $Walker = new Walker\Walker($Config); }
+		try { $Walker = new Walker\Engine($Config); }
 		catch(Exception $Error) {
 			$this::Message($Error->GetMessage());
 		}
