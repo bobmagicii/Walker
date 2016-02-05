@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "869d2cb1054470b0aa03a00a5535b718",
-    "content-hash": "292c4df969bb09dfbebf650f5b8bd3b3",
+    "hash": "3917c2b2aabe6a0182a55f6be37a4245",
+    "content-hash": "940586e1138b2df8f1b719e44648ee4d",
     "packages": [
         {
             "name": "masterminds/html5",
@@ -117,16 +117,16 @@
         },
         {
             "name": "netherphp/object",
-            "version": "v1.0.2",
+            "version": "v1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/netherphp/object.git",
-                "reference": "6236c364fcf394de5c2fc03d4efc1714d8555f0e"
+                "reference": "066267f62ec367527e17f8ea0990ddb998046e87"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/netherphp/object/zipball/6236c364fcf394de5c2fc03d4efc1714d8555f0e",
-                "reference": "6236c364fcf394de5c2fc03d4efc1714d8555f0e",
+                "url": "https://api.github.com/repos/netherphp/object/zipball/066267f62ec367527e17f8ea0990ddb998046e87",
+                "reference": "066267f62ec367527e17f8ea0990ddb998046e87",
                 "shasum": ""
             },
             "require": {
@@ -155,7 +155,7 @@
                 "object",
                 "php"
             ],
-            "time": "2016-01-29 00:35:47"
+            "time": "2016-02-05 22:01:52"
         },
         {
             "name": "netherphp/option",
