@@ -245,8 +245,14 @@ the default settings for the entire app (currently).
 		if(file_exists($this->File) && !is_writable($this->File))
 		throw new Walker\Error\FileNotWritable($this->File);
 
-		if(!file_exists($this->File) && !is_writable(dirname($this->File)))
-		throw new Walker\Error\FileNotWritable($this->File);
+		if(!file_exists($this->File)) {
+			if(!is_dir(dirname($this->File)))
+			if(!@mkdir(dirname($this->File),0777,true))
+			throw new Walker\Error\FileNotWritable($this->File);
+
+			if(!is_writable(dirname($this->File)))
+			throw new Walker\Error\FileNotWritable($this->File);
+		}
 
 		file_put_contents(
 			$this->File,
