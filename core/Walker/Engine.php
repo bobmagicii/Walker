@@ -290,6 +290,9 @@ class Engine {
 	multiple sources somehow.
 	//*/
 
+		$URL = $this->TransformURL_EnsureProtocolExists($URL);
+		$URL = $this->TransformURL_EnsureAbsoluteAddress($URL);
+
 		foreach($Classes as $Class) {
 			if(!is_a($Class,'Walker\\Proto\\TransformURL',TRUE)) {
 				$this->PrintLine(">> {$Class} is not a valid TransformURL");
@@ -306,6 +309,44 @@ class Engine {
 		}
 
 		return (string)$URL;
+	}
+
+	protected function
+	TransformURL_EnsureAbsoluteAddress(String $URL):
+	String {
+
+		if(strpos($URL,'/') === 0) {
+			$URL = sprintf(
+				'%s://%s%s',
+				parse_url($this->Config->StartURL,PHP_URL_SCHEME),
+				parse_url($this->Config->StartURL,PHP_URL_HOST),
+				$URL
+			);
+		}
+
+		elseif(!preg_match('/^(\w+):\/\//',$URL)) {
+			$URL = sprintf(
+				'%s/%s',
+				rtrim(dirname($this->Config->StartURL),'/'),
+				$URL
+			);
+		}
+
+		return $URL;
+	}
+
+	protected function
+	TransformURL_EnsureProtocolExists(String $URL):
+	String {
+
+		if(strpos($URL,'//') === 0) {
+			$Proto = parse_url($this->Config->StartURL,PHP_URL_SCHEME);
+			if(!$Proto) $Proto = 'http';
+
+			$URL = "{$Proto}:{$URL}";
+		}
+
+		return $URL;
 	}
 
 	////////////////
@@ -477,7 +518,7 @@ class Engine {
 	//*/
 
 		if(!$this->Config->Verbose)
-		return;
+		return $this;
 
 		Nether\Console\Client::Message($Input);
 
@@ -492,7 +533,7 @@ class Engine {
 	//*/
 
 		if(!$this->Config->Verbose)
-		return;
+		return $this;
 
 		Nether\Console\Client::PrintLine($Input);
 
