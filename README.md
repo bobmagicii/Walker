@@ -148,3 +148,9 @@ and/or that they have working `WillHandleTransform` methods to ensure that they
 yield to other transforms if they do not apply to the current URL. If all the
 transforms in the list report true from `WillHandleTransform` then all of them
 will transform it in the order they are configured.
+
+
+	"TransformDownload": [
+		"Walker\\Transform\\TumblrLargestImage"
+	],
+
