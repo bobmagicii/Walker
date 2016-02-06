@@ -2,9 +2,11 @@
 
 namespace Walker;
 use \Nether;
+use \QueryPath;
 use \Walker;
 
 use \Exception;
+use \StdClass;
 
 class Engine {
 
@@ -153,43 +155,36 @@ class Engine {
 		$Iter = $this->Config->LastIter;
 		$URL = $this->Config->LastURL;
 		$DownloadURL = null;
+		$Document = null;
+		$Element = null;
 
 		while($URL) {
 
-			$this->PrintLine(">> Fetching {$URL}");
-			$HTML = file_get_contents($URL);
-
-			if(!$HTML)
-			throw new Exception("unable to fetch {$URL}");
+			$Document = $this->GetDocumentFromURL($URL);
 
 			////////
 
-			$Document = @htmlqp($HTML);
+			$Element = $this->GetElementFromDocument(
+				$Document,
+				$this->Config->QueryDownload
+			);
 
-			if(!$Document)
-			throw new Exception("unable to parse {$URL}");
+			if(!count($Element)) {
+				$this->PrintLine(">> No download elements found on {$URL}");
+				continue;
+			}
 
-			////////
+			foreach($Element as $Iter => $Item) {
+				$DownloadURL = $this->GetAttributeFromElement(
+					$Element,
+					$this->Config->QueryDownloadAttr
+				);
 
-			$Element = @$Document->Find($this->Config->QueryDownload);
-			// god damn is this library (QueryPath) noisy as fuck.
-			// we already accepted the HTML may be poorly formed. its the
-			// internet after all... your E_WARNINGS can diaf.
-
-			foreach($Element as $Item) {
-				switch($this->Config->QueryDownloadAttr) {
-					default: {
-						$DownloadURL = $Item->Attr($this->Config->QueryDownloadAttr);
-						break;
-					}
+				if(!$DownloadURL) {
+					$this->PrintLine(">> Nothing found for element {$Iter}");
+					continue;
 				}
-			}
 
-			if(!$DownloadURL) {
-				$this->PrintLine(">> Nothing found on {$URL}");
-			}
-
-			else {
 				$this->Download($DownloadURL);
 			}
 
@@ -197,15 +192,28 @@ class Engine {
 
 			// find out where to go next.
 
-			$URL = null;
+			$Element = $this->GetElementFromDocument(
+				$Document,
+				$this->Config->QueryNext
+			);
 
-			////////
+			if(!count($Element)) {
+				$this->PrintLine(">> No next elements found on {$URL}");
+				$URL = null;
+				continue;
+			}
+
+			$URL = $this->GetAttributeFromElement(
+				$Element,
+				$this->Config->QueryNextAttr
+			);
 
 			if($URL) {
 				$this->Config->LastURL = $URL;
 				$this->Config->LastIter++;
 				$this->Config->Write();
 
+				$this->PrintLine(">> Waiting {$this->Config->Delay}sec...");
 				sleep($this->Config->Delay);
 			}
 		}
@@ -216,7 +224,72 @@ class Engine {
 	////////////////
 	////////////////
 
-	public function
+	protected function
+	GetDocumentFromURL(String $URL):
+	QueryPath\DOMQuery {
+	/*//
+	download the page from the specified thing and attempt to parse it as
+	a valid html thing.
+	//*/
+
+		$this->PrintLine(">> Fetching {$URL}");
+		$HTML = file_get_contents($URL);
+
+		if(!$HTML)
+		throw new Exception("unable to fetch {$URL}");
+
+		////////
+
+		$Document = @htmlqp($HTML);
+
+		if(!$Document)
+		throw new Exception("unable to parse {$URL}");
+
+		////////
+
+		return $Document;
+	}
+
+	protected function
+	GetElementFromDocument(QueryPath\DOMQuery $Document, String $Query):
+	QueryPath\DOMQuery {
+	/*//
+	attempt to find the element(s) described by the specified query.
+	//*/
+
+		$this->PrintLine(">> Searching HTML for {$Query}");
+
+		// god damn is this library (QueryPath) noisy as fuck.
+		// we already accepted the HTML may be poorly formed. its the
+		// internet after all...
+		return @$Document->Find($Query);
+	}
+
+	protected function
+	GetAttributeFromElement(QueryPath\DOMQuery $Element, String $Query):
+	String {
+	/*//
+	attempt to extract data from the specified attribute.
+	//*/
+
+		switch($Query) {
+			case 'text': {
+				$DownloadURL = $Element->Text();
+				break;
+			}
+			default: {
+				$DownloadURL = $Element->Attr($Query);
+				break;
+			}
+		}
+
+		return $DownloadURL;
+	}
+
+	////////////////
+	////////////////
+
+	protected function
 	GetDownloadFilename(String $Input):
 	String {
 
