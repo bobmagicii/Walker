@@ -1,5 +1,16 @@
 {
+	"name":"bobmajdakjr/walker",
+	"description":"Walker, Texas Scraper.",
+	"keywords":["php","scrape","app"],
+	"license":"BSD-3-Clause",
+	"authors":[{
+		"name":"Bob Majdak Jr",
+		"email":"bob@nether.io",
+		"homepage":"http://nether.io",
+		"role":"developer"
+	}],
 	"require": {
+		"php": ">=7.0.0",
 		"querypath/querypath": "^3.0",
 		"netherphp/object": "^1.0.3",
 		"netherphp/console": "^1.0.7",
