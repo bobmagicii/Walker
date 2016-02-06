@@ -261,6 +261,7 @@ the default settings for the entire app (currently).
 			'SaveDir'           => Nether\Option::Get('SaveDir'),
 			'SaveFile'          => '',
 			'StartURL'          => '',
+			'PadFileNums'       => 0,
 			'TransformDownload' => [],
 			'TransformNext'     => [],
 			'UserAgent'         => Nether\Option::Get('UserAgent')

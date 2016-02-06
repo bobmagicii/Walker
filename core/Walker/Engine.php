@@ -441,8 +441,14 @@ class Engine {
 			'DATETIME'   => date('Y-m-d-H-i-s'),
 			'EXT'        => $this->GetFileExtension(basename($Input)),
 			'TIMESTAMP'  => date('U'),
-			'FILENUM'    => (int)$this->Config->LastIter,
-			'FILENUMDIR' => $this->GetFileCount($this->Config->SaveDir)
+			'FILENUM'    => sprintf(
+				"%0{$this->Config->PadFileNums}d",
+				$this->Config->LastIter
+			),
+			'FILENUMDIR' => sprintf(
+				"%0{$this->Config->PadFileNums}d",
+				$this->GetFileCount($this->Config->SaveDir)
+			)
 		]);
 	}
 
