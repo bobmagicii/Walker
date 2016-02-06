@@ -105,3 +105,19 @@ zzz... zzz... elsewhere...
 	-rw-r--r--    1 bob      Administ    88284 Feb  6 01:06 xkcd-0003.jpg
 	-rw-r--r--    1 bob      Administ    66490 Feb  6 01:06 xkcd-0004.jpg
 	-rw-r--r--    1 bob      Administ    39876 Feb  6 01:06 xkcd-0005.jpg
+
+## URL Transforms
+
+You can write classes which are able to transform URLs before Walker commits
+to actually using them. The best example I can think of is if you are scraping
+Tumblr you might want to make sure you are getting the largest version of the
+image they have (currently the _1280 version).
+
+You can do this by writing your own class which implements the
+`Walker\Proto\TransformURL` interface (a whole 2 static methods). See the
+[TransformURL interface file](core/Walker/Proto/TransformURL.php) for
+descriptions of what needs to be done there. Also check out the
+[TumblrLargestImage class file](core/Walker/Transform/TumblrLargestImage.php)
+to see a completed example.
+
+Once you hav
