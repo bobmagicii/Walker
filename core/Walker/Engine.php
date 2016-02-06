@@ -6,6 +6,7 @@ use \QueryPath;
 use \Walker;
 
 use \Exception;
+use \FilesystemIterator;
 use \StdClass;
 
 class Engine {
@@ -290,35 +291,91 @@ class Engine {
 	////////////////
 
 	protected function
+	GetFileCount(String $Dir):
+	Int {
+	/*//
+	lol lol lol lol lol @ this.
+	//*/
+
+		return iterator_count(new FilesystemIterator(
+			$this->ParseStringVariables($Dir),
+			FilesystemIterator::SKIP_DOTS
+		));
+	}
+
+	protected function
+	GetFileExtension(String $Input):
+	String {
+	/*//
+	get what file extension to save the file with.
+	//*/
+
+		// todo - handle filenames that do not have extensions on them which
+		// you know will happen on the internet. this will most likely require
+		// an HTTP head to check the content type.
+
+		$Ext = pathinfo($Input,PATHINFO_EXTENSION);
+		if(!$Ext) return '.none';
+
+		return $Ext;
+	}
+
+	protected function
 	GetDownloadFilename(String $Input):
 	String {
+	/*//
+	get the full filename to use when writing to disk.
+	//*/
+
 
 		if(!$this->Config->SaveFile)
 		return $this->GetDownloadFilename_FromOriginal($Input);
 
 		else
-		return $this->GetDownloadFilename_WithVariables($Input);
+		return $this->GetDownloadFilename_FromConfig($Input);
 	}
 
 	protected function
 	GetDownloadFilename_FromOriginal(String $Input):
 	String {
+	/*//
+	generate a full filename from the original file's basename.
+	//*/
+
+		return sprintf(
+			'%s%s%s',
+			$this->ParseStringVariables($this->Config->SaveDir),
+			DIRECTORY_SEPARATOR,
+			basename($Input)
+		);
+	}
+
+	protected function
+	GetDownloadFilename_FromConfig(String $Input):
+	String {
+	/*//
+	generate a full filename from our configuration option.
+	//*/
 
 		$Filename = sprintf(
 			'%s%s%s',
 			$this->Config->SaveDir,
 			DIRECTORY_SEPARATOR,
-			basename($Input)
+			$this->Config->SaveFile
 		);
 
 		return $this->ParseStringVariables($Filename,[
 			'DATE'       => date('Y-m-d'),
 			'DATETIME'   => date('Y-m-d-H-i-s'),
+			'EXT'        => $this->GetFileExtension(basename($Input)),
 			'TIMESTAMP'  => date('U'),
-			'FILENUM'    => $this->Config->LastIter,
-			'DIRFILENUM' => 0 // count how many files in directory for use as next id.
+			'FILENUM'    => (int)$this->Config->LastIter,
+			'FILENUMDIR' => $this->GetFileCount($this->Config->SaveDir)
 		]);
 	}
+
+	////////////////
+	////////////////
 
 	public function
 	Message(String $Input):

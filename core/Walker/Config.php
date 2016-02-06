@@ -231,7 +231,7 @@ the default settings for the entire app (currently).
 
 		parent::__Construct($Dataset,[
 			'Delay'             => Nether\Option::Get('Delay'),
-			'LastIter'          => 0,
+			'LastIter'          => 1,
 			'LastURL'           => '',
 			'QueryDownload'     => '',
 			'QueryDownloadAttr' => '',
