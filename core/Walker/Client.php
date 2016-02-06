@@ -79,18 +79,21 @@ technically, this class is the cli client.
 
 		$ConfigName = $this->GetInput(2);
 		if(!$ConfigName) {
-			$this::Message('no config specified.');
+			$this::PrintLine('no config specified.');
 			$this->Run('help');
+
 			return 1;
 		}
 
 		try { $Walker = new Walker\Engine($ConfigName); }
 		catch(Exception $Error) {
-			$this::Message(sprintf(
+			$this::PrintLine(sprintf(
 				'LOAD: %s %s',
 				get_class($Error),
 				$Error->GetMessage()
 			));
+
+			return 1;
 		}
 
 		if($this->GetOption('reset'))
@@ -98,11 +101,13 @@ technically, this class is the cli client.
 
 		try { $Walker->Run(); }
 		catch(Exception $Error) {
-			$this::Message(sprintf(
+			$this::PrintLine(sprintf(
 				'RUN: %s %s',
 				get_class($Error),
 				$Error->GetMessage()
 			));
+
+			return 1;
 		}
 
 		return 0;
