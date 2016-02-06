@@ -22,13 +22,16 @@ technically, this class is the cli client.
 	//*/
 
 		$this::Messages(
+			'Walker Texas Scraper',
 			'',
 			'create <configname>',
 			'creates a new config file with the default settings for you to fill in.',
 			'',
 			'walk <configname>',
 			'walks the path specified by the conf/<configname>.json file',
-			''
+			'',
+			'    --reset',
+			'    reset the job to start over from StartURL rather than where it left off last time.'
 		);
 
 		return 0;
@@ -36,31 +39,31 @@ technically, this class is the cli client.
 
 	////////////////
 	////////////////
-	
+
 	public function
 	HandleCreate():
 	Int {
-		
+
 		$ConfigName = $this->GetInput(2);
 		if(!$ConfigName) {
 			$this::Message('no config specified.');
 			$this->Run('help');
 			return 1;
 		}
-		
+
 		$Config = new Walker\Config;
 		$Config->SetName($ConfigName);
-		
+
 		if(file_exists($Config->GetFile()) && !$this->GetOption('force')) {
 			$this::Message("a config for {$ConfigName} already exists. use --force to overwrite.");
 			return 1;
 		}
-		
+
 		$this::Message("writing default settings to {$Config->GetFile()}");
-		$Config->Write();	
+		$Config->Write();
 		return 0;
 	}
-	
+
 	////////////////
 	////////////////
 
@@ -86,14 +89,17 @@ technically, this class is the cli client.
 				$Error->GetMessage()
 			));
 		}
-		
+
+		if($this->GetOption('reset'))
+		$Walker->Reset();
+
 		try { $Walker->Run(); }
 		catch(Exception $Error) {
 			$this::Message(sprintf(
 				'RUN: %s %s',
 				get_class($Error),
 				$Error->GetMessage()
-			));			
+			));
 		}
 
 		return 0;

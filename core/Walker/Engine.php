@@ -76,6 +76,20 @@ class Engine {
 		return;
 	}
 
+	public function
+	Reset():
+	Self {
+	/*//
+	resets the configuration so that the job will start over from the start
+	instead of where it left off.
+	//*/
+
+		$this->Config->LastIter = 1;
+		$this->Config->LastURL = '';
+		$this->Config->Write();
+		return $this;
+	}
+
 	////////////////
 	////////////////
 
@@ -484,6 +498,9 @@ class Engine {
 
 		return $this;
 	}
+
+	////////////////
+	////////////////
 
 	public function
 	ParseStringVariables(String $Input, Array $Replace=null):
