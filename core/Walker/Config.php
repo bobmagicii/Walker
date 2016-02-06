@@ -104,7 +104,7 @@ the default settings for the entire app (currently).
 	////////////////
 
 	public
-	$Delay = null;
+	$Delay;
 	/*//
 	@type Int
 	defines how long we should wait between each step to not punch websites
@@ -112,7 +112,15 @@ the default settings for the entire app (currently).
 	//*/
 
 	public
-	$LastURL = null;
+	$LastIter;
+	/*//
+	@type Int
+	defines the last iter used while processing. each time it downloads
+	a file it increments this up one.
+	//*/
+
+	public
+	$LastURL;
 	/*//
 	@type String
 	defines the URL the process left off on. when it reaches the end of
@@ -125,10 +133,16 @@ the default settings for the entire app (currently).
 	$QueryDownload;
 
 	public
+	$QueryDownloadAttr;
+
+	public
 	$QueryNext;
 
 	public
-	$SaveDir = null;
+	$QueryNextAttr;
+
+	public
+	$SaveDir;
 	/*//
 	@type String
 	defines the directory files will be saved into while running. this string
@@ -136,7 +150,7 @@ the default settings for the entire app (currently).
 	//*/
 
 	public
-	$SaveFile = null;
+	$SaveFile;
 	/*//
 	@type String
 	defines the filename for saving files. this string accepts a few varibles
@@ -145,7 +159,7 @@ the default settings for the entire app (currently).
 	//*/
 
 	public
-	$StartURL = null;
+	$StartURL;
 	/*//
 	@type String
 	defines the URL to begin walking at. it will hit this url, download what
@@ -154,7 +168,7 @@ the default settings for the entire app (currently).
 	//*/
 
 	public
-	$UserAgent = null;
+	$UserAgent;
 	/*//
 	@type String
 	these hips don't lie but your process will need to in order to not get
@@ -163,7 +177,7 @@ the default settings for the entire app (currently).
 	//*/
 
 	public
-	$Verbose = true;
+	$Verbose;
 	/*//
 	@type Bool
 	controls how much stdout the thing dumps while working.
@@ -193,14 +207,17 @@ the default settings for the entire app (currently).
 		$ForceDefaultValues = false;
 
 		parent::__Construct($Dataset,[
-			'Delay'         => Nether\Option::Get('Delay'),
-			'LastURL'       => '',
-			'QueryDownload' => '',
-			'QueryNext'     => '',
-			'SaveDir'       => Nether\Option::Get('SaveDir'),
-			'SaveFile'      => '',
-			'StartURL'      => '',
-			'UserAgent'     => Nether\Option::Get('UserAgent')
+			'Delay'             => Nether\Option::Get('Delay'),
+			'LastIter'          => 0,
+			'LastURL'           => '',
+			'QueryDownload'     => '',
+			'QueryDownloadAttr' => '',
+			'QueryNext'         => '',
+			'QueryNextAttr'     => '',
+			'SaveDir'           => Nether\Option::Get('SaveDir'),
+			'SaveFile'          => '',
+			'StartURL'          => '',
+			'UserAgent'         => Nether\Option::Get('UserAgent')
 		],['ForceDefaultValues'=>$ForceDefaultValues]);
 
 		return;

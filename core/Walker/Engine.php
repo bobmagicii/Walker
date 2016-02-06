@@ -51,6 +51,32 @@ class Engine {
 	////////////////
 
 	public function
+	Download($URL) {
+	/*//
+	@todo migrate to a chunked transfer.
+	//*/
+
+		$Filename = $this->GetDownloadFilename($URL);
+
+		$this->PrintLine(">> Downloading {$URL}...");
+		file_put_contents(
+			$Filename,
+			file_get_contents($URL)
+		);
+
+		$this->PrintLine(sprintf(
+			'>> Saved %s (%s)',
+			$Filename,
+			filesize($Filename)
+		));
+
+		return;
+	}
+
+	////////////////
+	////////////////
+
+	public function
 	Run($Opt=null):
 	Self {
 	/*//
@@ -124,10 +150,13 @@ class Engine {
 			$this->Config->Write();
 		}
 
+		$Iter = $this->Config->LastIter;
 		$URL = $this->Config->LastURL;
+		$DownloadURL = null;
 
 		while($URL) {
 
+			$this->PrintLine(">> Fetching {$URL}");
 			$HTML = file_get_contents($URL);
 
 			if(!$HTML)
@@ -135,9 +164,34 @@ class Engine {
 
 			////////
 
-			// find the thing we want to keep.
+			$Document = @htmlqp($HTML);
 
-			// ...
+			if(!$Document)
+			throw new Exception("unable to parse {$URL}");
+
+			////////
+
+			$Element = @$Document->Find($this->Config->QueryDownload);
+			// god damn is this library (QueryPath) noisy as fuck.
+			// we already accepted the HTML may be poorly formed. its the
+			// internet after all... your E_WARNINGS can diaf.
+
+			foreach($Element as $Item) {
+				switch($this->Config->QueryDownloadAttr) {
+					default: {
+						$DownloadURL = $Item->Attr($this->Config->QueryDownloadAttr);
+						break;
+					}
+				}
+			}
+
+			if(!$DownloadURL) {
+				$this->PrintLine(">> Nothing found on {$URL}");
+			}
+
+			else {
+				$this->Download($DownloadURL);
+			}
 
 			////////
 
@@ -149,6 +203,7 @@ class Engine {
 
 			if($URL) {
 				$this->Config->LastURL = $URL;
+				$this->Config->LastIter++;
 				$this->Config->Write();
 
 				sleep($this->Config->Delay);
@@ -162,6 +217,37 @@ class Engine {
 	////////////////
 
 	public function
+	GetDownloadFilename(String $Input):
+	String {
+
+		if(!$this->Config->SaveFile)
+		return $this->GetDownloadFilename_FromOriginal($Input);
+
+		else
+		return $this->GetDownloadFilename_WithVariables($Input);
+	}
+
+	protected function
+	GetDownloadFilename_FromOriginal(String $Input):
+	String {
+
+		$Filename = sprintf(
+			'%s%s%s',
+			$this->Config->SaveDir,
+			DIRECTORY_SEPARATOR,
+			basename($Input)
+		);
+
+		return $this->ParseStringVariables($Filename,[
+			'DATE'       => date('Y-m-d'),
+			'DATETIME'   => date('Y-m-d-H-i-s'),
+			'TIMESTAMP'  => date('U'),
+			'FILENUM'    => $this->Config->LastIter,
+			'DIRFILENUM' => 0 // count how many files in directory for use as next id.
+		]);
+	}
+
+	public function
 	Message(String $Input):
 	Self {
 	/*//
@@ -172,6 +258,21 @@ class Engine {
 		return;
 
 		Nether\Console\Client::Message($Input);
+
+		return $this;
+	}
+
+	public function
+	PrintLine(String $Input):
+	Self {
+	/*//
+	send messages to the console if enabled.
+	//*/
+
+		if(!$this->Config->Verbose)
+		return;
+
+		Nether\Console\Client::PrintLine($Input);
 
 		return $this;
 	}
