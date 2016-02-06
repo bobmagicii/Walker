@@ -186,6 +186,12 @@ class Engine {
 					continue;
 				}
 
+				$DownloadURL = $this->TransformDownloadURL($DownloadURL);
+				if(!$DownloadURL) {
+					$this->PrintLine(">> Transforms canceled download for element {$Iter}");
+					continue;
+				}
+
 				$this->Download($DownloadURL);
 			}
 
@@ -209,6 +215,8 @@ class Engine {
 				$this->Config->QueryNextAttr
 			);
 
+			$URL = $this->TransformNextURL($URL);
+
 			if($URL) {
 				$this->Config->LastURL = $URL;
 				$this->Config->LastIter++;
@@ -220,6 +228,70 @@ class Engine {
 		}
 
 		return $this;
+	}
+
+	////////////////
+	////////////////
+
+	protected function
+	TransformDownloadURL(String $URL):
+	String {
+	/*//
+	apply transforms to the download url.
+	//*/
+
+		if(is_array($this->Config->TransformDownload))
+		return (string)$this->TransformURL(
+			$URL,
+			$this->Config->TransformDownload
+		);
+
+		return $URL;
+	}
+
+	protected function
+	TransformNextURL(String $URL):
+	String {
+	/*//
+	apply transforms to the next url.
+	//*/
+
+		if(is_array($this->Config->TransformNext))
+		return (string)$this->TransformURL(
+			$URL,
+			$this->Config->TransformNext
+		);
+
+		return $URL;
+	}
+
+	protected function
+	TransformURL(String $URL, Array $Classes) {
+	/*//
+	given a list of classes that know how to transforms urls, run through
+	them and let them have at it. if configuring multiple it is best that
+	only one really edits it, unless you build your transforms to chain.
+	transform classes have the ability to refuse to transform so you can
+	stack them and have them test in the event you may be fetching from
+	multiple sources somehow.
+	//*/
+
+		foreach($Classes as $Class) {
+			if(!is_a($Class,'Walker\\Proto\\TransformURL',TRUE)) {
+				$this->PrintLine(">> {$Class} is not a valid TransformURL");
+				continue;
+			}
+
+			if(!$Class::WillHandleTransform($URL)) {
+				$this->PrintLine(">> {$Class} refused transformation");
+				continue;
+			}
+
+			$this->PrintLine(">> Applying URL transform {$Class}");
+			$URL = $Class::Transform($URL);
+		}
+
+		return (string)$URL;
 	}
 
 	////////////////

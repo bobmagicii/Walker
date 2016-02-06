@@ -191,6 +191,27 @@ the default settings for the entire app (currently).
 	//*/
 
 	public
+	$TransformDownload;
+	/*//
+	@type String or Array
+	define what classes should be used to transform a url that we want to
+	download. you can use this to ensure that you are getting the largest
+	size available or whatever. if it is a string it will be convereted
+	into an array. Transforms must implement Proto\TransformURL. you can
+	have multiple with the ability for each one to turn down handling the
+	URL if the pattern doesn't match what they want.
+	//*/
+
+	public
+	$TransformNext;
+	/*//
+	@type String or Array
+	define what classes should be used to transform a url for the next page.
+	same principle as TransformDownload. probably less useful but why not be
+	feature complete.
+	//*/
+
+	public
 	$UserAgent;
 	/*//
 	@type String
@@ -240,8 +261,16 @@ the default settings for the entire app (currently).
 			'SaveDir'           => Nether\Option::Get('SaveDir'),
 			'SaveFile'          => '',
 			'StartURL'          => '',
+			'TransformDownload' => [],
+			'TransformNext'     => [],
 			'UserAgent'         => Nether\Option::Get('UserAgent')
 		],['ForceDefaultValues'=>$ForceDefaultValues]);
+
+		if(is_string($this->TransformDownload))
+		$this->TransformDownload = [$this->TransformDownload];
+
+		if(is_string($this->TransformNext))
+		$this->TransformNext = [$this->TransformNext];
 
 		return;
 	}
