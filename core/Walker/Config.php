@@ -264,7 +264,8 @@ the default settings for the entire app (currently).
 			'PadFileNums'       => 0,
 			'TransformDownload' => [],
 			'TransformNext'     => [],
-			'UserAgent'         => Nether\Option::Get('UserAgent')
+			'UserAgent'         => Nether\Option::Get('UserAgent'),
+			'Verbose'           => true
 		],['ForceDefaultValues'=>$ForceDefaultValues]);
 
 		if(is_string($this->TransformDownload))
