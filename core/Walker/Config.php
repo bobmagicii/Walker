@@ -103,24 +103,40 @@ the default settings for the entire app (currently).
 	////////////////
 	////////////////
 
-	public
-	$Delay;
+	// this next bit is going to look hilarious.
+
+	// these properties are intentionally commented out to allow the Nether
+	// Object constructor to define them public JIT with their proper defaults.
+	// this also includes filling in any that are missing in your configs
+	// because they were added after you created the project. they however
+	// still need to be documented which is why this is still here.
+
+	// Nether Object works on the princpal of "does the property exist? no?
+	// ok then it does now and this is the default value." which is why these
+	// are commented out, so they dont exist. these are all the properties
+	// which will get read and written to the json file in the end. Nether
+	// Object will promise that these will in-fact exist after construction
+	// and that they will have reasonable default values if they were not
+	// defined by the json file.
+
+	// public
+	// $Delay;
 	/*//
 	@type Int
 	defines how long we should wait between each step to not punch websites
 	in the face or piss off their network admins.
 	//*/
 
-	public
-	$LastIter;
+	// public
+	// $LastIter;
 	/*//
 	@type Int
 	defines the last iter used while processing. each time it downloads
 	a file it increments this up one.
 	//*/
 
-	public
-	$LastURL;
+	// public
+	// $LastURL;
 	/*//
 	@type String
 	defines the URL the process left off on. when it reaches the end of
@@ -129,8 +145,8 @@ the default settings for the entire app (currently).
 	added to the series you were ninjaing later.
 	//*/
 
-	public
-	$QueryDownload;
+	// public
+	// $QueryDownload;
 	/*//
 	@type String
 	defines the pattern that will result in what elements in the html to find
@@ -138,8 +154,8 @@ the default settings for the entire app (currently).
 	the same type of string you would as a css selector or jquery query.
 	//*/
 
-	public
-	$QueryDownloadAttr;
+	// public
+	// $QueryDownloadAttr;
 	/*//
 	@type String
 	defines which attribute of the found element contains the data that
@@ -147,16 +163,16 @@ the default settings for the entire app (currently).
 	an img tag then you would put 'src' here for example.
 	//*/
 
-	public
-	$QueryNext;
+	// public
+	// $QueryNext;
 	/*//
 	@type string
 	defines the pattern that will result in what elements in the html contain
 	the url to the next page to scan.
 	//*/
 
-	public
-	$QueryNextAttr;
+	// public
+	// $QueryNextAttr;
 	/*//
 	@type string
 	defines which attribute of the found element contains the data that
@@ -164,16 +180,16 @@ the default settings for the entire app (currently).
 	then you would put 'href' here for example.
 	//*/
 
-	public
-	$SaveDir;
+	// public
+	// $SaveDir;
 	/*//
 	@type String
 	defines the directory files will be saved into while running. this string
 	accepts a few variables to make setting easier.
 	//*/
 
-	public
-	$SaveFile;
+	// public
+	// $SaveFile;
 	/*//
 	@type String
 	defines the filename for saving files. this string accepts a few varibles
@@ -181,8 +197,8 @@ the default settings for the entire app (currently).
 	empty then the original filename from the web will be used.
 	//*/
 
-	public
-	$StartURL;
+	// public
+	// $StartURL;
 	/*//
 	@type String
 	defines the URL to begin walking at. it will hit this url, download what
@@ -190,8 +206,8 @@ the default settings for the entire app (currently).
 	out of next page buttons.
 	//*/
 
-	public
-	$TransformDownload;
+	// public
+	// $TransformDownload;
 	/*//
 	@type String or Array
 	define what classes should be used to transform a url that we want to
@@ -202,8 +218,8 @@ the default settings for the entire app (currently).
 	URL if the pattern doesn't match what they want.
 	//*/
 
-	public
-	$TransformNext;
+	// public
+	// $TransformNext;
 	/*//
 	@type String or Array
 	define what classes should be used to transform a url for the next page.
@@ -211,8 +227,8 @@ the default settings for the entire app (currently).
 	feature complete.
 	//*/
 
-	public
-	$UserAgent;
+	// public
+	// $UserAgent;
 	/*//
 	@type String
 	these hips don't lie but your process will need to in order to not get
@@ -220,8 +236,8 @@ the default settings for the entire app (currently).
 	why not.
 	//*/
 
-	public
-	$Verbose;
+	// public
+	// $Verbose;
 	/*//
 	@type Bool
 	controls how much stdout the thing dumps while working.
@@ -238,7 +254,7 @@ the default settings for the entire app (currently).
 	//*/
 
 		$Dataset = null;
-		$ForceDefaultValues = true;
+		$Options = [ 'ForceDefaultValues' => true ];
 
 		if($ConfigName) {
 			try { $Dataset = $this->Read($ConfigName); }
@@ -248,7 +264,9 @@ the default settings for the entire app (currently).
 		}
 
 		if($Dataset)
-		$ForceDefaultValues = false;
+		$Options['ForceDefaultValues'] = false;
+
+		////////
 
 		parent::__Construct($Dataset,[
 			'Delay'             => Nether\Option::Get('Delay'),
@@ -266,7 +284,9 @@ the default settings for the entire app (currently).
 			'TransformNext'     => [],
 			'UserAgent'         => Nether\Option::Get('UserAgent'),
 			'Verbose'           => true
-		],['ForceDefaultValues'=>$ForceDefaultValues]);
+		],$Options);
+
+		////////
 
 		if(is_string($this->TransformDownload))
 		$this->TransformDownload = [$this->TransformDownload];
