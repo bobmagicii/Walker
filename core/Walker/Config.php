@@ -131,15 +131,38 @@ the default settings for the entire app (currently).
 
 	public
 	$QueryDownload;
+	/*//
+	@type String
+	defines the pattern that will result in what elements in the html to find
+	that contain what we want to download. you should more or less be writing
+	the same type of string you would as a css selector or jquery query.
+	//*/
 
 	public
 	$QueryDownloadAttr;
+	/*//
+	@type String
+	defines which attribute of the found element contains the data that
+	describes the url we want to download. if your QueryDownload targeted
+	an img tag then you would put 'src' here for example.
+	//*/
 
 	public
 	$QueryNext;
+	/*//
+	@type string
+	defines the pattern that will result in what elements in the html contain
+	the url to the next page to scan.
+	//*/
 
 	public
 	$QueryNextAttr;
+	/*//
+	@type string
+	defines which attribute of the found element contains the data that
+	describes the url for the next page. if your QueryNext targeted an a tag
+	then you would put 'href' here for example.
+	//*/
 
 	public
 	$SaveDir;
