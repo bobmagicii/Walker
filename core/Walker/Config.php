@@ -261,16 +261,22 @@ the default settings for the entire app (currently).
 
 		$this->SetName($Name);
 
+		////////
+
 		if(!file_exists($this->File))
 		throw new Walker\Error\FileNotFound($this->File);
 
 		if(!is_readable($this->File))
 		throw new Walker\Error\FileNotReadable($this->File);
 
+		////////
+
 		$Dataset = json_decode(file_get_contents($this->File));
 
 		if(!is_object($Dataset))
 		throw new Exception("{$this->File} had parsing errors.");
+
+		////////
 
 		return $Dataset;
 	}
@@ -286,10 +292,14 @@ the default settings for the entire app (currently).
 		if(!$this->Name || !$this->File)
 		throw new Exception('this Config object needs to know its Name before it can write to disk.');
 
-		if(file_exists($this->File) && !is_writable($this->File))
-		throw new Walker\Error\FileNotWritable($this->File);
+		////////
 
-		if(!file_exists($this->File)) {
+		if(file_exists($this->File)) {
+			if(!is_writable($this->File))
+			throw new Walker\Error\FileNotWritable($this->File);
+		}
+
+		else {
 			if(!is_dir(dirname($this->File)))
 			if(!@mkdir(dirname($this->File),0777,true))
 			throw new Walker\Error\FileNotWritable($this->File);
@@ -297,6 +307,8 @@ the default settings for the entire app (currently).
 			if(!is_writable(dirname($this->File)))
 			throw new Walker\Error\FileNotWritable($this->File);
 		}
+
+		////////
 
 		file_put_contents(
 			$this->File,
