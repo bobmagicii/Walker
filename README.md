@@ -106,6 +106,10 @@ zzz... zzz... elsewhere...
 	-rw-r--r--    1 bob      Administ    66490 Feb  6 01:06 xkcd-0004.jpg
 	-rw-r--r--    1 bob      Administ    39876 Feb  6 01:06 xkcd-0005.jpg
 
+If interupted it will continue where it left off. This also includes being able
+to restart the task at a later date to consume updates that may have been added
+since you last did it.
+
 ## URL Transforms
 
 You can write classes which are able to transform URLs before Walker commits
