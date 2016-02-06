@@ -120,4 +120,12 @@ descriptions of what needs to be done there. Also check out the
 [TumblrLargestImage class file](core/Walker/Transform/TumblrLargestImage.php)
 to see a completed example.
 
-Once you hav
+Once you have created your transform classes check out your project's json file
+again. You should see two properties one called `TransformDownload` and another
+called `TransformNext` and you should notice that these properties are arrays.
+List the FQCN of the transform classes you want to use in this project. If you
+are specifying multiple classes then be sure to put them in the order you need
+and/or that they have working `WillHandleTransform` methods to ensure that they
+yield to other transforms if they do not apply to the current URL. If all the
+transforms in the list report true from `WillHandleTransform` then all of them
+will transform it in the order they are configured.
