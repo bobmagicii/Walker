@@ -110,6 +110,21 @@ If interupted it will continue where it left off. This also includes being able
 to restart the task at a later date to consume updates that may have been added
 since you last did it.
 
+## String Variables
+
+SaveDir supports the following string variables:
+
+* %CONFIGNAME% = the name of the json file without the json.
+
+SaveFile supports the variables from SaveDir plus:
+
+* %DATE% = Y-m-d (download date)
+* %DATETIME% = Y-m-d-H-i-s (download date and time)
+* %EXT% = the extension from the original file name (note, currently doesnt handle extentionless files well yet. names them .nope lol)
+* %TIMESTAMP% = unix time it was downloadeded.
+* %FILENUM% = the counter of how many times it has downloaded. (may have gaps if nothing found on page)
+* %FILENUMDIR% = the counter of how many files are in that directory. (wont ever gap)
+
 ## URL Transforms
 
 You can write classes which are able to transform URLs before Walker commits
