@@ -247,8 +247,9 @@ class Engine {
 				$this->Config->LastIter++;
 				$this->Config->Write();
 
-				$this->PrintLine(">> Waiting {$this->Config->Delay}sec...");
-				sleep($this->Config->Delay);
+				$Delay = $this->GetParsedDelay();
+				$this->PrintLine(sprintf('>> Waiting %.3fsec...',($Delay/pow(10,6))));
+				usleep($Delay);
 			}
 		}
 
@@ -362,6 +363,29 @@ class Engine {
 
 	////////////////
 	////////////////
+
+	protected function
+	GetParsedDelay():
+	Int {
+	/*//
+	returning microseconds, use usleep.
+	//*/
+
+		// just return the value if given a number.
+		if(is_int($this->Config->Delay) || is_float($this->Config->Delay))
+		return $Delay * 6;
+
+		// randomise the value if given a range.
+		if(strpos($this->Config->Delay,'+') !== FALSE) {
+			list($Wait,$Vary) = explode('+',$this->Config->Delay);
+			return mt_rand(
+				($Wait*pow(10,6)),
+				((($Wait+$Vary)*pow(10,6)))
+			);
+		}
+
+		return mt_rand(3000000,5000000);
+	}
 
 	protected function
 	GetDocumentFromURL(String $URL):
