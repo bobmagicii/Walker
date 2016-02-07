@@ -170,6 +170,7 @@ class Engine {
 		$Iter = $this->Config->LastIter;
 		$URL = $this->Config->LastURL;
 		$DownloadURL = null;
+		$LastURL = null;
 		$Document = null;
 		$Element = null;
 
@@ -224,12 +225,22 @@ class Engine {
 				continue;
 			}
 
+			$LastURL = $URL;
+
 			$URL = $this->GetAttributeFromElement(
 				$Element,
 				$this->Config->QueryNextAttr
 			);
 
 			$URL = $this->TransformNextURL($URL);
+
+			if($LastURL === $URL) {
+				$this->PrintLine(">> URL is looping back, ending task.");
+				$URL = null;
+				continue;
+			}
+
+			////////
 
 			if($URL) {
 				$this->Config->LastURL = $URL;
