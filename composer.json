@@ -10,10 +10,10 @@
 		"role":"developer"
 	}],
 	"require": {
-		"php": ">=7.0.0",
+		"php": ">=7.2.0",
 		"querypath/querypath": "^3.0",
-		"netherphp/object": "^1.0.3",
-		"netherphp/console": "^1.0.7",
+		"netherphp/object": "^3.0.0",
+		"netherphp/console": "^3.0.0",
 		"netherphp/option": "^1.0.0"
 	},
 	"autoload": {

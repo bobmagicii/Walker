@@ -192,7 +192,7 @@ class Engine {
 
 			foreach($Element as $Iter => $Item) {
 				$DownloadURL = $this->GetAttributeFromElement(
-					$Element,
+					$Item,
 					$this->Config->QueryDownloadAttr
 				);
 
@@ -373,7 +373,7 @@ class Engine {
 
 		// just return the value if given a number.
 		if(is_int($this->Config->Delay) || is_float($this->Config->Delay))
-		return $Delay * 6;
+		return $this->Config->Delay * pow(10,6);
 
 		// randomise the value if given a range.
 		if(strpos($this->Config->Delay,'+') !== FALSE) {
@@ -395,8 +395,24 @@ class Engine {
 	a valid html thing.
 	//*/
 
+		$HTTP = [
+			'header'=>'',
+			'user_agent' => ''
+		];
+
+		if(property_exists($this->Config,'UserAgent'))
+		$HTTP['user_agent'] = $this->Config->UserAgent;
+
+		if(property_exists($this->Config,'Cookies'))
+		$HTTP['header'] .= "Cookie: {$this->Config->Cookies}\r\n";
+
+		$Context = stream_context_create([
+			'http'  => $HTTP,
+			'https' => $HTTP
+		]);
+
 		$this->PrintLine(">> Fetching {$URL}");
-		$HTML = file_get_contents($URL);
+		$HTML = file_get_contents($URL,FALSE,$Context);
 
 		if(!$HTML)
 		throw new Exception("unable to fetch {$URL}");

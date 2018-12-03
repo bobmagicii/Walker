@@ -67,10 +67,16 @@ things it is doing.
 		"StartURL": "http://xkcd.com/1/",
 		"TransformDownload": [],
 		"TransformNext": [],
+		"Cookies": "",
 		"UserAgent": "",
 		"Verbose": true,
 		"PadFileNums": 4
 	}
+
+The Cookies option is very basic, but will allow you to walk right into most
+websites that you need to log into, such as Tumblr. Basically log into Tumblr, open up the web inspector, and copy and paste the request string into this option. You are looking for the Network Tab, filter by Doc, refresh the page, look for the "Request Headers" with the line that start with "Cookie:" - it is likely very long. Paste the entire thing here, done.
+
+Example: https://i.imgur.com/GJHFccD.png You're going to copy paste the entire cluster that I scribbled out in green. Not the Cookie: prefix, just the data.
 
 ## Step 3) Walk it.
 

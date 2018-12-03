@@ -1,39 +1,40 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "hash": "e4e78d225cc20407db229de368e44fd1",
-    "content-hash": "e060c7531415516af314612a08dbc935",
+    "content-hash": "8feba425457aaaa66a102d8619e39881",
     "packages": [
         {
             "name": "masterminds/html5",
-            "version": "2.1.2",
+            "version": "2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Masterminds/html5-php.git",
-                "reference": "8f782e0f01a6e33a319bdc8f6de9cfd6569979a4"
+                "reference": "cadcfaaa13153e0e8eb92c49a53e140cf1a85dea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Masterminds/html5-php/zipball/8f782e0f01a6e33a319bdc8f6de9cfd6569979a4",
-                "reference": "8f782e0f01a6e33a319bdc8f6de9cfd6569979a4",
+                "url": "https://api.github.com/repos/Masterminds/html5-php/zipball/cadcfaaa13153e0e8eb92c49a53e140cf1a85dea",
+                "reference": "cadcfaaa13153e0e8eb92c49a53e140cf1a85dea",
                 "shasum": ""
             },
             "require": {
+                "ext-ctype": "*",
+                "ext-dom": "*",
                 "ext-libxml": "*",
                 "php": ">=5.3.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "4.*",
                 "sami/sami": "~2.0",
-                "satooshi/php-coveralls": "0.6.*"
+                "satooshi/php-coveralls": "1.0.*"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.1-dev"
+                    "dev-master": "2.2-dev"
                 }
             },
             "autoload": {
@@ -70,24 +71,24 @@
                 "serializer",
                 "xml"
             ],
-            "time": "2015-06-07 08:43:18"
+            "time": "2018-11-17T20:24:36+00:00"
         },
         {
             "name": "netherphp/console",
-            "version": "v1.0.7",
+            "version": "v3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/netherphp/console.git",
-                "reference": "504887f47a205c804f97ed12ad6b266498b88a6b"
+                "reference": "99af482ce5d4d64ab1b57c3e6db7506b146d38c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/netherphp/console/zipball/504887f47a205c804f97ed12ad6b266498b88a6b",
-                "reference": "504887f47a205c804f97ed12ad6b266498b88a6b",
+                "url": "https://api.github.com/repos/netherphp/console/zipball/99af482ce5d4d64ab1b57c3e6db7506b146d38c2",
+                "reference": "99af482ce5d4d64ab1b57c3e6db7506b146d38c2",
                 "shasum": ""
             },
             "require": {
-                "netherphp/object": "~1.0.0"
+                "netherphp/object": "^3.0.0"
             },
             "type": "library",
             "autoload": {
@@ -113,24 +114,24 @@
                 "console",
                 "php"
             ],
-            "time": "2016-02-04 00:14:58"
+            "time": "2017-08-20T01:38:07+00:00"
         },
         {
             "name": "netherphp/object",
-            "version": "v1.0.3",
+            "version": "v3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/netherphp/object.git",
-                "reference": "066267f62ec367527e17f8ea0990ddb998046e87"
+                "reference": "fd07e9340d9d2e4faff7ebb7e197d3ffb6f72ff4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/netherphp/object/zipball/066267f62ec367527e17f8ea0990ddb998046e87",
-                "reference": "066267f62ec367527e17f8ea0990ddb998046e87",
+                "url": "https://api.github.com/repos/netherphp/object/zipball/fd07e9340d9d2e4faff7ebb7e197d3ffb6f72ff4",
+                "reference": "fd07e9340d9d2e4faff7ebb7e197d3ffb6f72ff4",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.4.0"
+                "php": ">=7.1.0"
             },
             "type": "library",
             "autoload": {
@@ -155,7 +156,7 @@
                 "object",
                 "php"
             ],
-            "time": "2016-02-05 22:01:52"
+            "time": "2018-06-12T16:40:49+00:00"
         },
         {
             "name": "netherphp/option",
@@ -197,20 +198,20 @@
                 "options",
                 "php"
             ],
-            "time": "2014-03-22 17:46:59"
+            "time": "2014-03-22T17:46:59+00:00"
         },
         {
             "name": "querypath/querypath",
-            "version": "3.0.4",
+            "version": "3.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/technosophos/querypath.git",
-                "reference": "af0a5e6ab64be0cf5dde7f208124f66782387176"
+                "reference": "6b8e2395fac61fac25bbe962f94def556cb85f7d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/technosophos/querypath/zipball/af0a5e6ab64be0cf5dde7f208124f66782387176",
-                "reference": "af0a5e6ab64be0cf5dde7f208124f66782387176",
+                "url": "https://api.github.com/repos/technosophos/querypath/zipball/6b8e2395fac61fac25bbe962f94def556cb85f7d",
+                "reference": "6b8e2395fac61fac25bbe962f94def556cb85f7d",
                 "shasum": ""
             },
             "require": {
@@ -239,7 +240,7 @@
                 "xml",
                 "xslt"
             ],
-            "time": "2015-10-10 20:47:58"
+            "time": "2016-08-01T22:40:30+00:00"
         }
     ],
     "packages-dev": [],

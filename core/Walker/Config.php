@@ -31,7 +31,7 @@ Nether\Option::Define([
 ////////////////
 
 class Config
-extends Nether\Object {
+extends Nether\Object\Mapped {
 /*//
 this class defines the unique configurations that can be created to process
 the various jobs you may want to perform. this file also happens to define
@@ -282,6 +282,7 @@ the default settings for the entire app (currently).
 			'PadFileNums'       => 0,
 			'TransformDownload' => [],
 			'TransformNext'     => [],
+			'Cookies'           => '',
 			'UserAgent'         => Nether\Option::Get('UserAgent'),
 			'Verbose'           => true
 		],$Options);
