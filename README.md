@@ -11,7 +11,7 @@ a web SAPI but feel free to do what you want honeybadger don't care.
 
 # Requirements
 
-* PHP 7.0.0 or newer
+* PHP 7.2.0 or newer
 * Composer
 * An understanding of DOM Query strings. (aka CSS Selectors, jQuery(...), document.querySelector(...))
 
